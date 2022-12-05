@@ -6,15 +6,17 @@
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/05 13:39:52 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/05 15:23:26 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer.h"
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "libft.h"
 
 #define PROMPT "minishell -> "
 
@@ -41,9 +43,13 @@ static int	initialize_signal_handlers(void)
 
 static void	execute_line(const char *line)
 {
-	TokenList* tokens = lexer(line);
-	CommandLine* command = parse(tokens);
-	int exit_code = execute(command);
+	t_list	*tokens;
+
+	tokens = lexical_analysis(line);
+	ft_lstiter(tokens, print_token);
+	// CommandLine* command = parse(tokens);
+	// int exit_code = execute(command);
+	ft_lstclear(&tokens, free);
 }
 
 int	main(int argc, char *argv[], char *environ[])

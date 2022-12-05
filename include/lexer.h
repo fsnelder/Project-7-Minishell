@@ -1,34 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.c                                            :+:    :+:            */
+/*   lexer.h                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/05 14:17:08 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/05 15:18:03 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/05 14:06:30 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/05 15:23:37 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
+#ifndef LEXER_H
+# define LEXER_H
 
-static void	abort_program(const char *s)
-{
-	perror(s);
-	exit(EXIT_FAILURE);
-}
+# include "libft.h"
+# include <stddef.h>
 
-void	*malloc_check(void *ptr)
-{
-	if (!ptr)
-	{
-		abort_program("malloc");
-	}
-	return (ptr);
-}
+typedef enum e_token_type {
+	PIPE,
+	WORD,
+	REDIRECT_IN,
+	REDIRECT_OUT,
+	REDIRECT_HEREDOC,
+	REDIRECT_APPEND
+}	t_token_type;
 
-void	*ft_malloc(size_t n)
+typedef struct s_token
 {
-	return (malloc_check(malloc(n)));
-}
+	t_token_type	type;
+	const char		*token;
+	size_t			length;
+}	t_token;
+
+t_list	*lexical_analysis(const char *line);
+void	print_token(void *t); // TODO: remove
+
+#endif

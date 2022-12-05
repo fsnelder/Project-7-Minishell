@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.c                                            :+:    :+:            */
+/*   util.h                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/05 14:17:08 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/05 15:18:03 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/05 14:17:34 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/05 14:59:50 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
+#ifndef UTIL_H
+# define UTIL_H
 
-static void	abort_program(const char *s)
-{
-	perror(s);
-	exit(EXIT_FAILURE);
-}
+# include <stddef.h>
 
-void	*malloc_check(void *ptr)
+typedef enum e_result
 {
-	if (!ptr)
-	{
-		abort_program("malloc");
-	}
-	return (ptr);
-}
+	SUCCESS,
+	GENERAL_ERROR
+}	t_result;
 
-void	*ft_malloc(size_t n)
-{
-	return (malloc_check(malloc(n)));
-}
+void	*ft_malloc(size_t n);
+void	*malloc_check(void *ptr);
+void	*ft_malloc(size_t n);
+
+#endif

@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 14:17:34 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/05 14:59:50 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/06 11:30:01 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 typedef enum e_result
 {
-	SUCCESS,
+	SUCCESS = 0,
 	GENERAL_ERROR
 }	t_result;
 

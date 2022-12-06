@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 14:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 13:46:36 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/06 14:02:50 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_token
 	size_t			length;
 }	t_token;
 
-t_list	*lexical_analysis(const char *line);
+int		lexical_analysis(const char *line, t_list **tokens);
 void	print_token(void *t); // TODO: remove
 
 #endif

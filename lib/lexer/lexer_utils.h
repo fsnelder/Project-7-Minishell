@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 10:02:18 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 10:06:38 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/06 11:33:06 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 typedef struct s_lexer
 {
 	t_token		*current;
-	t_list		*tokens;
+	t_list		**tokens;
 	const char	*line;
 }	t_lexer;
 
@@ -26,7 +26,7 @@ int		parse_redirect_in(char ch, t_lexer *lexer);
 int		parse_redirect_out(char ch, t_lexer *lexer);
 int		parse_pipe(char ch, t_lexer *lexer);
 
-void	lexer_init(t_lexer *lexer, const char *line);
+void	lexer_init(t_lexer *lexer, t_list **tokens, const char *line);
 void	lexer_destroy(t_lexer *lexer);
 void	lexer_new_token(
 			t_lexer *lexer, t_token_type type, const char *s, size_t len);

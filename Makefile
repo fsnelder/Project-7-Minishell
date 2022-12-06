@@ -4,6 +4,7 @@ IMAGE_NAME = linux
 CONTAINER_NAME = linux_container
 
 EXECUTABLE = $(BUILD_DIR)/src/$(NAME)
+TEST_EXECUTABLE = $(BUILD_DIR)/test/test
 
 build: $(BUILD_DIR)
 	cmake --build $(BUILD_DIR)
@@ -13,6 +14,9 @@ $(BUILD_DIR):
 
 run: build
 	$(EXECUTABLE)
+
+test: build
+	$(TEST_EXECUTABLE)
 
 docker:
 	docker build -t $(IMAGE_NAME) .

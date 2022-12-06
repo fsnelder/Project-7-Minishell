@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/05 15:23:26 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/06 11:02:09 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <readline/history.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "libft.h"
 
 #define PROMPT "minishell -> "

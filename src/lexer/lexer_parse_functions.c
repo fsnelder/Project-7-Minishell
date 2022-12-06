@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 10:01:10 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 10:07:27 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/06 13:46:36 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,30 @@ int	parse_generic(char ch, t_lexer *lexer)
 
 int	parse_redirect_in(char ch, t_lexer *lexer)
 {
-	if (lexer->current && lexer->current->type == REDIRECT_IN)
+	if (lexer->current && lexer->current->type == TOKEN_REDIRECT_IN)
 	{
-		lexer->current->type = REDIRECT_HEREDOC;
+		lexer->current->type = TOKEN_REDIRECT_HEREDOC;
 		lexer->current->length += 1;
 	}
 	else
 	{
 		lexer_flush_token(lexer);
-		lexer_new_token(lexer, REDIRECT_IN, lexer->line, 1);
+		lexer_new_token(lexer, TOKEN_REDIRECT_IN, lexer->line, 1);
 	}
 	return (SUCCESS);
 }
 
 int	parse_redirect_out(char ch, t_lexer *lexer)
 {
-	if (lexer->current && lexer->current->type == REDIRECT_OUT)
+	if (lexer->current && lexer->current->type == TOKEN_REDIRECT_OUT)
 	{
-		lexer->current->type = REDIRECT_APPEND;
+		lexer->current->type = TOKEN_REDIRECT_APPEND;
 		lexer->current->length += 1;
 	}
 	else
 	{
 		lexer_flush_token(lexer);
-		lexer_new_token(lexer, REDIRECT_OUT, lexer->line, 1);
+		lexer_new_token(lexer, TOKEN_REDIRECT_OUT, lexer->line, 1);
 	}
 	return (SUCCESS);
 }

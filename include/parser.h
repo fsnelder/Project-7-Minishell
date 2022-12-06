@@ -1,38 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.h                                            :+:    :+:            */
+/*   parser.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/05 14:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 13:46:36 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/06 12:41:38 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/06 13:59:42 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef PARSER_H
+# define PARSER_H
 
 # include "libft.h"
-# include <stddef.h>
+# include "lexer.h"
 
-typedef enum e_token_type {
-	PIPE,
-	WORD,
-	TOKEN_REDIRECT_IN,
-	TOKEN_REDIRECT_OUT,
-	TOKEN_REDIRECT_HEREDOC,
-	TOKEN_REDIRECT_APPEND
-}	t_token_type;
-
-typedef struct s_token
+typedef enum e_redirect_type
 {
-	t_token_type	type;
-	const char		*token;
-	size_t			length;
-}	t_token;
+	REDIRECT_IN,
+	REDIRECT_APPEND,
+	REDIRECT_OUT,
+	REDIRECT_HEREDOC
+}	t_redirect_type;
 
-t_list	*lexical_analysis(const char *line);
-void	print_token(void *t); // TODO: remove
+typedef struct s_redirect
+{
+	t_redirect_type	redirect_type;
+	t_token			*word;
+}	t_redirect;
+
+typedef struct s_command
+{
+	t_list			*t_redirect;
+	const char		*command_name;
+	const char		**arguments;
+}	t_command;
+
+int	parse(t_list *tokens, t_list **commands);
 
 #endif

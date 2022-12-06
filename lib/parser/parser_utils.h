@@ -1,38 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer.h                                            :+:    :+:            */
+/*   parser_utils.h                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/05 14:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 14:17:21 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/06 14:05:49 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/06 14:06:39 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef PARSER_UTILS_H
+# define PARSER_UTILS_H
 
 # include "libft.h"
-# include <stddef.h>
 
-typedef enum e_token_type {
-	PIPE,
-	WORD,
-	TOKEN_REDIRECT_IN,
-	TOKEN_REDIRECT_OUT,
-	TOKEN_REDIRECT_HEREDOC,
-	TOKEN_REDIRECT_APPEND
-}	t_token_type;
-
-typedef struct s_token
+typedef struct s_parser
 {
-	t_token_type	type;
-	const char		*token;
-	size_t			length;
-}	t_token;
-
-int		lexical_analysis(const char *line, t_list **tokens);
-void	print_token(void *t); // TODO: remove
+	t_list	**commands;
+	t_list	*token;
+}	t_parser;
 
 #endif

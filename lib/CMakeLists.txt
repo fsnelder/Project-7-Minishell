@@ -5,6 +5,7 @@ add_library(${NAME}
 	./lexer/lexer.c
 	./lexer/lexer_utils.c
 	./lexer/lexer_parse_functions.c
+	./parser/parser.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

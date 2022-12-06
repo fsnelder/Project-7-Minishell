@@ -6,11 +6,12 @@
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 11:02:09 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/06 11:36:11 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "util.h"
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -45,8 +46,11 @@ static int	initialize_signal_handlers(void)
 static void	execute_line(const char *line)
 {
 	t_list	*tokens;
+	int		result;
 
-	tokens = lexical_analysis(line);
+	result = lexical_analysis(line, &tokens);
+	if (result != SUCCESS)
+		return ;
 	ft_lstiter(tokens, print_token);
 	// CommandLine* command = parse(tokens);
 	// int exit_code = execute(command);

@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 10:00:56 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 10:07:09 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/06 11:35:05 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,18 @@
 #include "lexer_utils.h"
 #include "util.h"
 
-void	lexer_init(t_lexer *lexer, const char *line)
+void	lexer_init(t_lexer *lexer, t_list **tokens, const char *line)
 {
 	lexer->current = NULL;
-	lexer->tokens = NULL;
+	*tokens = NULL;
+	lexer->tokens = tokens;
 	lexer->line = line;
 }
 
 void	lexer_destroy(t_lexer *lexer)
 {
-	ft_lstclear(&lexer->tokens, free);
+	if (lexer->tokens)
+		ft_lstclear(lexer->tokens, free);
 	free(lexer->current);
 }
 
@@ -40,7 +42,7 @@ void	lexer_flush_token(t_lexer *lexer)
 {
 	if (!lexer->current)
 		return ;
-	ft_lstadd_back(&lexer->tokens, malloc_check(ft_lstnew(lexer->current)));
+	ft_lstadd_back(lexer->tokens, malloc_check(ft_lstnew(lexer->current)));
 	lexer->current = NULL;
 }
 

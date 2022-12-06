@@ -4,6 +4,8 @@ add_executable(${NAME}
 	main.c
 	utils.c
 	./lexer/lexer.c
+	./lexer/lexer_utils.c
+	./lexer/lexer_parse_functions.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

@@ -1,5 +1,7 @@
 NAME = minishell
-BUILD_DIR := debug
+BUILD_DIR = debug
+IMAGE_NAME = linux
+CONTAINER_NAME = linux_container
 
 EXECUTABLE = $(BUILD_DIR)/src/$(NAME)
 
@@ -12,4 +14,15 @@ $(BUILD_DIR):
 run: build
 	$(EXECUTABLE)
 
-.PHONY: build run
+docker:
+	docker build -t $(IMAGE_NAME) .
+	docker run --name $(CONTAINER_NAME) -v $(shell pwd):/app -d $(IMAGE_NAME)
+	docker exec -it $(CONTAINER_NAME) bash
+
+clean:
+	$(RM) -r $(BUILD_DIR)
+
+re: clean
+	$(MAKE) build
+
+.PHONY: build run clean re

@@ -6,6 +6,8 @@ add_library(${NAME}
 	./lexer/lexer_utils.c
 	./lexer/lexer_parse_functions.c
 	./parser/parser.c
+	"./string/ft_string.c"
+	./expander/expand.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

@@ -44,6 +44,7 @@ add_library(${NAME}
 ./ft_tolower.c
 ./ft_toupper.c
 ./ft_isspace.c
+./ft_strndup.c
 )
 
 target_include_directories(${NAME} PUBLIC .)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   libft.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2022/12/05 13:52:17 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/05 14:23:17 by fsnelder      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   libft.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/05 13:52:17 by fsnelder          #+#    #+#             */
+/*   Updated: 2022/12/07 11:13:29 by fsnelder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 Extra
 */
 int		ft_isspace(int ch);
+char	*ft_strndup(const char *s1, size_t n);
 
 #endif

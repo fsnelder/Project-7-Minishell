@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parser.h                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2022/12/06 12:41:38 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 13:59:42 by fsnelder      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/06 12:41:38 by fsnelder          #+#    #+#             */
+/*   Updated: 2022/12/07 11:45:03 by fsnelder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ typedef struct s_redirect
 
 typedef struct s_command
 {
-	t_list			*t_redirect;
+	t_list			*redirections;
 	const char		*command_name;
-	const char		**arguments;
+	t_list			*arguments;
 }	t_command;
 
 int	parse(t_list *tokens, t_list **commands);

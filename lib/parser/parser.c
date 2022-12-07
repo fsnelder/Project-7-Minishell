@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:33:29 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 12:48:36 by fsnelder         ###   ########.fr       */
+/*   Updated: 2022/12/07 13:11:02 by fsnelder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	parser_init(t_parser *parser, t_list *tokens, t_list **commands)
 	parser->token = tokens;
 }
 
-static void	command_destroy(void *command_ptr)
+void	command_destroy(void *command_ptr)
 {
 	t_command	*command;
 
@@ -77,6 +77,7 @@ static void	command_destroy(void *command_ptr)
 	free((void *)command->command_name);
 	ft_lstclear(&command->arguments, free);
 	ft_lstclear(&command->redirections, free);
+	free(command_ptr);
 }
 
 static void	parser_destroy(t_parser *parser)

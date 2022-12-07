@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 12:06:30 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 12:40:19 by fsnelder         ###   ########.fr       */
+/*   Updated: 2022/12/07 13:05:59 by fsnelder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static void	execute_line(const char *line)
 	ft_lstiter(commands, print_command);
 	// CommandLine* command = parse(tokens);
 	// int exit_code = execute(command);
+	ft_lstclear(&commands, command_destroy);
 	ft_lstclear(&tokens, free);
 }
 

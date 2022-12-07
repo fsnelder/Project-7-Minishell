@@ -19,7 +19,6 @@ test: build
 	$(TEST_EXECUTABLE)
 
 docker:
-	docker build -t $(IMAGE_NAME) .
 	docker run --name $(CONTAINER_NAME) -v $(shell pwd):/app -d $(IMAGE_NAME)
 	docker exec -it $(CONTAINER_NAME) bash
 

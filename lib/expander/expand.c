@@ -6,10 +6,11 @@
 /*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 13:36:49 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 14:25:38 by fsnelder         ###   ########.fr       */
+/*   Updated: 2022/12/07 15:13:59 by fsnelder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "expand.h"
 #include "ft_string.h"
 #include "libft.h"
 #include "util.h"
@@ -57,7 +58,7 @@ const char	*ft_getenv(const char *begin, const char *end, const char **envp)
 	size_t	len;
 
 	len = end - begin;
-	while (envp != NULL)
+	while (*envp != NULL)
 	{
 		if (ft_strncmp(begin, *envp, len) == 0 && (*envp)[len] == '=')
 			return (*envp + len + 1);
@@ -95,6 +96,7 @@ void	expand_exit_code(t_expander *expander)
 	code = malloc_check(ft_itoa(0));
 	string_push_str(&expander->result, code, code + ft_strlen(code));
 	free(code);
+	expander->src++;
 }
 
 void	expand_variable(t_expander *expander)

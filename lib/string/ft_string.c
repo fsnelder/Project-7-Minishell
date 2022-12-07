@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 13:19:32 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 13:48:30 by fsnelder         ###   ########.fr       */
+/*   Updated: 2022/12/07 14:56:36 by fsnelder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,9 @@ void	string_push_str(t_string *str, const char *src, const char *end)
 		string_push_back(str, *src);
 		src++;
 	}
+}
+
+char	*string_cstr(t_string *str)
+{
+	return (str->str);
 }

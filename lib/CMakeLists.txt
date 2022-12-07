@@ -8,6 +8,7 @@ add_library(${NAME}
 	./parser/parser.c
 	"./string/ft_string.c"
 	./expander/expand.c
+	./executor/executor.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

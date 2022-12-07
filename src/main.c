@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 14:09:26 by fsnelder      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/05 12:06:30 by fsnelder          #+#    #+#             */
+/*   Updated: 2022/12/07 12:40:19 by fsnelder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ static void	sigint_handler(int sig)
 static int	initialize_signal_handlers(void)
 {
 	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
+
+void	print_command(void *cptr);
 
 static void	execute_line(const char *line)
 {
@@ -60,6 +62,7 @@ static void	execute_line(const char *line)
 		ft_lstclear(&tokens, free);
 		return ;
 	}
+	ft_lstiter(commands, print_command);
 	// CommandLine* command = parse(tokens);
 	// int exit_code = execute(command);
 	ft_lstclear(&tokens, free);

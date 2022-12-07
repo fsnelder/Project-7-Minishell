@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:33:29 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 11:55:51 by fsnelder         ###   ########.fr       */
+/*   Updated: 2022/12/07 12:48:36 by fsnelder         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,45 @@
 #include "util.h"
 #include <stdio.h>
 
-void print_command(void *cptr)
+char* get_redirect_string(t_redirect_type type) {
+	switch (type) {
+		case REDIRECT_IN:
+			return "<";
+		case REDIRECT_APPEND:
+			return ">>";
+		case REDIRECT_OUT:
+			return ">";
+		case REDIRECT_HEREDOC:
+			return "<<";
+	}
+	abort();
+}
+
+// Command: <name> , redirections: [ <redirections> ] arguments: [ <arguments> ]
+void	print_command(void *cptr)
 {
 	t_command *command = (t_command*)cptr;
+	printf("Command: %s, redirections: [", command->command_name);
+	for (t_list *x = command->redirections; x != NULL; x = x->next) {
+		t_redirect *r = (t_redirect *)x->content;
+		if (x != command->redirections) {
+			printf(",");
+		}
+		printf(" %s %.*s", get_redirect_string(r->redirect_type), (int)r->word->length, r->word->token);
+	}
+	printf(" ]");
+	printf(" arguments: [");
+	t_list *x = command->arguments;
+	while (x != NULL) {
+		char *arg = (char *)x->content;
+		if (x != command->arguments) {
+			printf(",");
+		}
+		printf(" %s", arg);
+		x = x->next;
+	}
+	printf(" ]");
+	printf("\n");
 }
 
 static void	parser_init(t_parser *parser, t_list *tokens, t_list **commands)
@@ -85,16 +121,17 @@ static int	parse_redirection(t_parser *parser, t_redirect_type type, t_token *to
 	parser_init_command(parser);
 	if (parser->token->next == NULL)
 	{
-		printf("parse error near '\\n\n");
+		printf("parse error near `\\n'\n");
 		return (GENERAL_ERROR);
 	}
 	next = (t_token *)parser->token->next->content;
 	if (next->type != WORD)
 	{
-		printf("parse error near %.*s\n", (int)next->length, next->token);
+		printf("parse error near `%.*s'\n", (int)next->length, next->token);
 		return (GENERAL_ERROR);
 	}
 	command_add_redirect(parser->command, type, next);
+	parser->token = parser->token->next->next;
 	return (SUCCESS);
 }
 

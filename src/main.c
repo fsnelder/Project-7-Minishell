@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 10:58:18 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 14:57:28 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static int	initialize_signal_handlers(void)
 	return (0);
 }
 
+// TODO: remove prototype
 void	print_command(void *cptr);
 
 static void	execute_line(const char *line)

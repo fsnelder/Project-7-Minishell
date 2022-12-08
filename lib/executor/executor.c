@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 15:17:55 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 14:46:10 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 15:00:16 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +241,8 @@ static int	handle_child_process(t_command *command)
 	return (GENERAL_ERROR);
 }
 
+// don't fork if builtin
+// expand before fork for builtin check, move expansion from handle_child_process
 static int	execute_one(t_executor *executor, int index, t_command *command)
 {
 	int	pid;

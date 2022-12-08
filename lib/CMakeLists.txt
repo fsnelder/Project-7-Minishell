@@ -8,6 +8,7 @@ add_library(${NAME}
 	./parser/parser.c
 	"./string/ft_string.c"
 	./expander/expand.c
+	./expander/expander_expand_functions.c
 	./executor/executor.c
 )
 

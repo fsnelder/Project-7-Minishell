@@ -6,11 +6,12 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 15:17:55 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 13:49:01 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 14:46:10 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "executor_utils.h"
 #include "parser.h"
 #include "expand.h"
 #include "util.h"
@@ -51,7 +52,7 @@ void	*token_to_expand(void *ptr)
 	t_token	*token;
 
 	token = (t_token *)ptr;
-	return (expand_token(token, (const char **)environ));
+	return (expand_token(token, (const char **)environ, EXPAND_ALL));
 }
 
 void	expand_redirection(void *ptr)
@@ -59,7 +60,10 @@ void	expand_redirection(void *ptr)
 	t_redirect	*redirect;
 
 	redirect = (t_redirect *)ptr;
-	redirect->expanded = expand_token(redirect->word, (const char **)environ);
+	if (redirect->redirect_type == REDIRECT_HEREDOC)
+		return ;
+	redirect->expanded = expand_token(
+			redirect->word, (const char **)environ, EXPAND_ALL);
 }
 
 static char	*construct_full_path(const char *directory, const char *name)
@@ -73,22 +77,39 @@ static char	*construct_full_path(const char *directory, const char *name)
 	return (full_path);
 }
 
+static void	free_split(char **strings)
+{
+	int	i;
+
+	i = 0;
+	while (strings[i] != NULL)
+	{
+		free(strings[i]);
+		i++;
+	}
+	free(strings);
+}
+
 static char	*search_path(const char *path, const char *name)
 {
 	char	**paths;
 	int		i;
 	char	*full_path;
 
-	paths = ft_split(path, ':');
+	paths = malloc_check(ft_split(path, ':'));
 	i = 0;
 	while (paths[i] != NULL)
 	{
 		full_path = construct_full_path(paths[i], name);
 		if (access(full_path, X_OK) == 0)
+		{
+			free_split(paths);
 			return (full_path);
+		}
 		free(full_path);
 		i++;
 	}
+	free_split(paths);
 	return (NULL);
 }
 
@@ -134,12 +155,16 @@ int	set_redirect(t_redirect *redirect, int file_mode, int dup_to)
 
 int	set_redirection(t_redirect *redirect)
 {
-	int	fd;
+	int	result;
 
 	if (redirect->redirect_type == REDIRECT_IN)
 		return (set_redirect(redirect, O_RDONLY, STDIN_FILENO));
 	else if (redirect->redirect_type == REDIRECT_HEREDOC)
-		return (set_redirect(redirect, O_RDONLY, STDIN_FILENO));
+	{
+		result = set_redirect(redirect, O_RDONLY, STDIN_FILENO);
+		unlink(redirect->expanded);
+		return (result);
+	}
 	else if (redirect->redirect_type == REDIRECT_OUT)
 		return (set_redirect(redirect,
 				O_WRONLY | O_TRUNC | O_CREAT, STDOUT_FILENO));
@@ -204,7 +229,10 @@ static int	handle_child_process(t_command *command)
 		return (SUCCESS);
 	result = find_command(&full_path, (char *)expanded_arguments->content);
 	if (result != SUCCESS)
+	{
+		printf("minishell: command not found\n");
 		return (result);
+	}
 	if (set_redirections(command->redirections) != SUCCESS)
 		return (GENERAL_ERROR);
 	args = list_arguments_to_array(expanded_arguments);
@@ -301,7 +329,8 @@ int	execute(t_list *commands)
 	t_executor	executor;
 	int			result;
 
-	// TODO: handle all heredoc redirections and convert to a simple input file redirection
+	if (process_heredocs(commands) != SUCCESS)
+		return (GENERAL_ERROR);
 	executor_init(&executor, commands);
 	if (executor.ncommands == 1)
 		result = execute_one(&executor, 0, (t_command *)commands->content);

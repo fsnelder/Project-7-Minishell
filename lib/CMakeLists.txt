@@ -10,6 +10,7 @@ add_library(${NAME}
 	./expander/expand.c
 	./expander/expander_expand_functions.c
 	./executor/executor.c
+	./executor/heredoc.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

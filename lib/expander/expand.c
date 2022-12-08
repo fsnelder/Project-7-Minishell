@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 13:36:49 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 10:38:38 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 14:23:12 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,8 @@ static void	expander_init(
 	expander->src = src;
 	expander->end = src + len;
 	expander->envp = envp;
-	// TODO: set initial capacity to len
-	expander->result = string_new(0);
+	expander->result = string_new(len);
 }
-
-
 
 /*
 <variable> = "$" ( <word> | "?" )
@@ -74,7 +71,7 @@ void	expand_environment_variable(t_expander *expander)
 
 typedef void	(*t_expander_function)(t_expander *);
 
-static void	expand_dispatch(t_expander *expander)
+static void	expand_dispatch(t_expander *expander, const char *to_expand)
 {
 	static const t_expander_function	expanders[255] = {
 	['$'] = expand_variable,
@@ -84,25 +81,26 @@ static void	expand_dispatch(t_expander *expander)
 	int									ch;
 
 	ch = (unsigned int)*expander->src;
-	if (expanders[ch] == NULL)
+	if (expanders[ch] == NULL || ft_strchr(to_expand, ch) == NULL)
 		expand_character(expander);
 	else
 		(expanders[ch])(expander);
 }
 
-t_string	expand_word(const char *src, size_t len, const char **envp)
+t_string	expand_word(
+	const char *src, size_t len, const char **envp, const char *to_expand)
 {
 	t_expander	expander;
 
 	expander_init(&expander, src, len, envp);
 	while (expander.src != expander.end)
 	{
-		expand_dispatch(&expander);
+		expand_dispatch(&expander, to_expand);
 	}
 	return (expander.result);
 }
 
-char	*expand_token(t_token *token, const char **envp)
+char	*expand_token(t_token *token, const char **envp, const char *to_expand)
 {
-	return (expand_word(token->token, token->length, envp).str);
+	return (expand_word(token->token, token->length, envp, to_expand).str);
 }

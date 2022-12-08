@@ -14,7 +14,7 @@ const char *FAKE_ENVIRONMENT[] = {
 
 t_string do_expand(const char* word)
 {
-	return expand_word(word, ft_strlen(word), FAKE_ENVIRONMENT);
+	return expand_word(word, ft_strlen(word), FAKE_ENVIRONMENT, EXPAND_ALL);
 }
 
 Test(single_quote, expander) {

@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 12:41:38 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 09:56:29 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 10:30:32 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_redirect
 {
 	t_redirect_type	redirect_type;
 	t_token			*word;
+	char			*expanded;
 }	t_redirect;
 
 typedef struct s_command

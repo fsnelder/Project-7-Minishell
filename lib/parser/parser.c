@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 12:33:29 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 10:11:33 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 10:46:58 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,12 @@ static void	parser_init(t_parser *parser, t_list *tokens, t_list **commands)
 	parser->token = tokens;
 }
 
+static void	redirect_destroy(void *redirect)
+{
+	free(((t_redirect *)redirect)->expanded);
+	free(redirect);
+}
+
 void	command_destroy(void *command_ptr)
 {
 	t_command	*command;
@@ -75,7 +81,7 @@ void	command_destroy(void *command_ptr)
 		return ;
 	command = (t_command *)command_ptr;
 	ft_lstclear(&command->arguments, NULL);
-	ft_lstclear(&command->redirections, free);
+	ft_lstclear(&command->redirections, redirect_destroy);
 	free(command_ptr);
 }
 
@@ -110,6 +116,7 @@ static void	command_add_redirect(
 	redirect = ft_malloc(1 * sizeof(t_redirect));
 	redirect->redirect_type = type;
 	redirect->word = word;
+	redirect->expanded = NULL;
 	ft_lstadd_back(&command->redirections, malloc_check(ft_lstnew(redirect)));
 }
 

@@ -6,11 +6,12 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 13:36:49 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 09:45:00 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 10:38:38 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expand.h"
+#include "lexer.h"
 #include "ft_string.h"
 #include "libft.h"
 #include "util.h"
@@ -99,4 +100,9 @@ t_string	expand_word(const char *src, size_t len, const char **envp)
 		expand_dispatch(&expander);
 	}
 	return (expander.result);
+}
+
+char	*expand_token(t_token *token, const char **envp)
+{
+	return (expand_word(token->token, token->length, envp).str);
 }

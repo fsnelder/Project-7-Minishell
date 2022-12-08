@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/05 12:06:30 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 15:01:41 by fsnelder         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/08 10:58:18 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "util.h"
 #include "parser.h"
+#include "executor.h"
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -63,8 +64,7 @@ static void	execute_line(const char *line)
 		return ;
 	}
 	ft_lstiter(commands, print_command);
-	// CommandLine* command = parse(tokens);
-	// int exit_code = execute(command);
+	result = execute(commands);
 	ft_lstclear(&commands, command_destroy);
 	ft_lstclear(&tokens, free);
 }

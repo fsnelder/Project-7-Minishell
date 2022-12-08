@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   util.h                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 14:17:34 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 11:30:01 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 10:49:56 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@
 typedef enum e_result
 {
 	SUCCESS = 0,
-	GENERAL_ERROR
+	GENERAL_ERROR,
+	COMMAND_NOT_FOUND = 127
 }	t_result;
 
 void	*ft_malloc(size_t n);
 void	*malloc_check(void *ptr);
 void	*ft_malloc(size_t n);
+
+extern char	**environ;
 
 #endif

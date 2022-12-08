@@ -6,14 +6,16 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 15:17:55 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 15:00:16 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 16:45:48 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include "executor_utils.h"
 #include "parser.h"
+#include "builtins.h"
 #include "expand.h"
+#include <stdbool.h>
 #include "util.h"
 #include <stdio.h>
 #include <unistd.h>
@@ -210,11 +212,15 @@ char	**list_arguments_to_array(t_list *arguments)
 
 /*
 1. expand command name, all arguments and all redirect names
-2. find the command to execute using environment's PATH (unless command contains '/')
-3. set redirections using dup, dup2
-4. close other unclosed file descriptors
-5. execute the command
+2. check if the command is a builtin
+3. find the command to execute using environment's PATH (unless command contains '/')
+4. set redirections using dup, dup2
+5. close other unclosed file descriptors
+6. execute the command
 */
+
+static bool	is_builtin(const char *name);
+static int	dispatch_builtin(t_command *command, char **args);
 
 static int	handle_child_process(t_command *command)
 {
@@ -227,26 +233,125 @@ static int	handle_child_process(t_command *command)
 	expanded_arguments = ft_lstmap(command->arguments, token_to_expand, free);
 	if (expanded_arguments == NULL)
 		return (SUCCESS);
+	if (set_redirections(command->redirections) != SUCCESS)
+		return (GENERAL_ERROR);
+	args = list_arguments_to_array(expanded_arguments);
+	if (is_builtin((const char *)expanded_arguments->content))
+		return (dispatch_builtin(command, args));
 	result = find_command(&full_path, (char *)expanded_arguments->content);
 	if (result != SUCCESS)
 	{
 		printf("minishell: command not found\n");
 		return (result);
 	}
-	if (set_redirections(command->redirections) != SUCCESS)
-		return (GENERAL_ERROR);
-	args = list_arguments_to_array(expanded_arguments);
 	execve(full_path, args, environ);
 	perror("minishell");
 	return (GENERAL_ERROR);
+}
+
+typedef int	(*t_builtin_function)(const char **, const char**);
+
+static int	get_builtin_index(const char *name)
+{
+	static const char	*builtins[] = {
+		"pwd",
+		NULL
+	};
+	int					i;
+
+	i = 0;
+	while (builtins[i] != NULL)
+	{
+		if (ft_strncmp(builtins[i], name, UINT64_MAX) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+static bool	is_builtin(const char *name)
+{
+	return (get_builtin_index(name) != -1);
+}
+
+
+// precondition: command is a builtin confirmed by `is_builtin(args[0])`
+static int	dispatch_builtin(t_command *command, char **args)
+{
+	static const t_builtin_function	builtins[] = {
+		ft_pwd
+	};
+
+	return (
+		(builtins[get_builtin_index(args[0])])((const char **)args, (const char **)environ));
+}
+
+static int	dup_std(int *std)
+{
+	std[0] = dup(STDIN_FILENO);
+	if (std[0] == -1)
+		return (GENERAL_ERROR);
+	std[1] = dup(STDOUT_FILENO);
+	if (std[1] == -1)
+	{
+		close(std[0]);
+		return (GENERAL_ERROR);
+	}
+	return (SUCCESS);
+}
+
+// this function succeeding is essential for the program to continue
+// so we exit on dup2 failure
+static int	reset_std(int *std)
+{
+	if (dup2(std[0], STDIN_FILENO) < 0)
+	{
+		perror("dup2");
+		exit(1);
+	}
+	if (dup2(std[1], STDOUT_FILENO) < 0)
+	{
+		perror("dup2");
+		exit(1);
+	}
+	close(std[0]);
+	close(std[1]);
+	return (SUCCESS);
+}
+
+static int	handle_builtin(
+		t_executor *executor, t_command *command, t_list *expanded)
+{
+	char	**args;
+	int		code;
+	int		std[2];
+
+	args = list_arguments_to_array(expanded);
+	// todo: set exit code
+	if (dup_std(std) != SUCCESS)
+		return (GENERAL_ERROR);
+	if (set_redirections(command->redirections) != SUCCESS)
+		return (GENERAL_ERROR);
+	code = dispatch_builtin(command, args);
+	ft_lstclear(&expanded, free);
+	free(args);
+	reset_std(std);
+	return (SUCCESS);
 }
 
 // don't fork if builtin
 // expand before fork for builtin check, move expansion from handle_child_process
 static int	execute_one(t_executor *executor, int index, t_command *command)
 {
-	int	pid;
+	int		pid;
+	t_list	*expanded_arguments;
 
+	ft_lstiter(command->redirections, expand_redirection);
+	expanded_arguments = ft_lstmap(command->arguments, token_to_expand, free);
+	if (expanded_arguments == NULL)
+		return (SUCCESS);
+	if (is_builtin((const char *)expanded_arguments->content))
+		return (handle_builtin(executor, command, expanded_arguments));
 	pid = fork();
 	if (pid == 0)
 		exit(handle_child_process(command));

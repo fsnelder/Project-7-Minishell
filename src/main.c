@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 14:57:28 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 15:33:26 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	sigint_handler(int sig)
 static int	initialize_signal_handlers(void)
 {
 	signal(SIGINT, sigint_handler);
-	// signal(SIGQUIT, SIG_IGN);
+	//signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
 

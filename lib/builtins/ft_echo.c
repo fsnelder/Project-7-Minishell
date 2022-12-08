@@ -1,31 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_pwd.c                                           :+:    :+:            */
+/*   ft_echo.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/08 15:01:56 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 16:36:25 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/08 16:13:10 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/08 16:15:04 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "util.h"
 #include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-int	ft_pwd(const char **args, const char **envp)
+int	ft_echo(const char **args, const char **envp)
 {
-	char	*cwd;
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-	{
-		perror("pwd");
-		return (1);
-	}
-	printf("PWD: %s\n", cwd);
-	free(cwd);
-	return (0);
+
 }

@@ -11,6 +11,7 @@ add_library(${NAME}
 	./expander/expander_expand_functions.c
 	./executor/executor.c
 	./executor/heredoc.c
+	./builtins/ft_pwd.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

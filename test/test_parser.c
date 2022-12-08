@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   test_parser.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/07 12:29:38 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 13:02:55 by fsnelder         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   test_parser.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/12/07 12:29:38 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/08 10:10:39 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,27 @@ static t_redirect* get_redirect(t_list *redirects, int index) {
 	return (t_redirect*)redirects->content;
 }
 
-static t_command* get_command(t_list *redirects, int index) {
+static t_command* get_command(t_list *commands, int index) {
 	for (int i = 0; i < index; i++) {
-		redirects = redirects->next;
+		commands = commands->next;
 	}
-	return (t_command*)redirects->content;
+	return (t_command*)commands->content;
+}
+
+static t_token*	get_argument(t_list *args, int index) {
+	for (int i = 0; i < index; i++) {
+		args = args->next;
+	}
+	return (t_token*)args->content;
+}
+
+static t_token* get_argument_from_command(t_list* commands, int command_index, int arg_index) {
+	return (get_argument(get_command(commands, command_index)->arguments, arg_index));
+}
+
+void assert_argument(t_list *arguments, const char *s, int index) {
+	t_token* token = get_argument(arguments, index);
+	cr_assert(strncmp(token->token, s, token->length) == 0);
 }
 
 Test(basic, parser) {
@@ -43,7 +59,7 @@ Test(basic, parser) {
 	cr_assert(commands != NULL);
 	cr_assert(commands->next == NULL);
 	t_command *cmd = (t_command*)commands->content;
-	cr_assert(strcmp(cmd->command_name, "ls") == 0);
+	assert_argument(cmd->arguments, "ls", 0);
 }
 
 Test(arguments, parser) {
@@ -51,9 +67,10 @@ Test(arguments, parser) {
 	int result = parse_wrapper("ls a=b 1 2", &commands);
 	cr_assert(result == SUCCESS);
 	t_command *cmd = (t_command*)commands->content;
-	cr_assert(strcmp((char*)cmd->arguments->content, "a=b") == 0);
-	cr_assert(strcmp((char*)cmd->arguments->next->content, "1") == 0);
-	cr_assert(strcmp((char*)cmd->arguments->next->next->content, "2") == 0);
+	assert_argument(cmd->arguments, "ls", 0);
+	assert_argument(cmd->arguments, "a=b", 1);
+	assert_argument(cmd->arguments, "1", 2);
+	assert_argument(cmd->arguments, "2", 3);
 }
 
 Test(redirections, parser) {
@@ -76,10 +93,10 @@ Test(pipes, parser) {
 	t_list *commands;
 	int result = parse_wrapper("a | b | c | d", &commands);
 	cr_assert(result == SUCCESS);
-	cr_assert(strcmp(get_command(commands, 0)->command_name, "a") == 0);
-	cr_assert(strcmp(get_command(commands, 1)->command_name, "b") == 0);
-	cr_assert(strcmp(get_command(commands, 2)->command_name, "c") == 0);
-	cr_assert(strcmp(get_command(commands, 3)->command_name, "d") == 0);
+	assert_argument(get_command(commands, 0)->arguments, "a", 0);
+	assert_argument(get_command(commands, 1)->arguments, "b", 0);
+	assert_argument(get_command(commands, 2)->arguments, "c", 0);
+	assert_argument(get_command(commands, 3)->arguments, "d", 0);
 }
 
 Test(pipe_start, parser) {

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/06 12:33:29 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 13:11:02 by fsnelder         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   parser.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/12/06 12:33:29 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/08 10:11:33 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char* get_redirect_string(t_redirect_type type) {
 void	print_command(void *cptr)
 {
 	t_command *command = (t_command*)cptr;
-	printf("Command: %s, redirections: [", command->command_name);
+	printf("Command: redirections: [");
 	for (t_list *x = command->redirections; x != NULL; x = x->next) {
 		t_redirect *r = (t_redirect *)x->content;
 		if (x != command->redirections) {
@@ -48,11 +48,11 @@ void	print_command(void *cptr)
 	printf(" arguments: [");
 	t_list *x = command->arguments;
 	while (x != NULL) {
-		char *arg = (char *)x->content;
+		t_token *arg = (t_token *)x->content;
 		if (x != command->arguments) {
 			printf(",");
 		}
-		printf(" %s", arg);
+		printf(" %.*s", (int)arg->length, arg->token);
 		x = x->next;
 	}
 	printf(" ]");
@@ -74,8 +74,7 @@ void	command_destroy(void *command_ptr)
 	if (!command_ptr)
 		return ;
 	command = (t_command *)command_ptr;
-	free((void *)command->command_name);
-	ft_lstclear(&command->arguments, free);
+	ft_lstclear(&command->arguments, NULL);
 	ft_lstclear(&command->redirections, free);
 	free(command_ptr);
 }
@@ -91,7 +90,6 @@ static void	parser_init_command(t_parser *parser)
 	if (parser->command != NULL)
 		return ;
 	parser->command = ft_malloc(1 * sizeof(t_command));
-	parser->command->command_name = NULL;
 	parser->command->arguments = NULL;
 	parser->command->redirections = NULL;
 }
@@ -170,15 +168,8 @@ static int	parse_pipe(t_parser *parser, t_token *token)
 
 static int	parse_word(t_parser *parser, t_token *token)
 {
-	char	*word;
-
 	parser_init_command(parser);
-	word = malloc_check(ft_strndup(token->token, token->length));
-	if (parser->command->command_name == NULL)
-		parser->command->command_name = word;
-	else
-		ft_lstadd_back(
-			&parser->command->arguments, malloc_check(ft_lstnew(word)));
+	ft_lstadd_back(&parser->command->arguments, malloc_check(ft_lstnew(token)));
 	parser->token = parser->token->next;
 	return (SUCCESS);
 }

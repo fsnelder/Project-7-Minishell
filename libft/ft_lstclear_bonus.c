@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_atoi.c                                          :+:    :+:            */
+/*   ft_lstclear_bonus.c                                :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 13:44:50 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/05 13:44:51 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/08 09:57:52 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ void	ft_lstclear(t_list **lst, void (*del)(void*))
 	while ((*lst) != NULL)
 	{
 		(*lst) = (*lst)-> next;
-		del ((temp)-> content);
+		if (del)
+		{
+			del ((temp)-> content);
+		}
 		free (temp);
 		temp = (*lst);
 	}

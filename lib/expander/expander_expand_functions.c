@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/08 09:31:31 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 14:03:04 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:43:41 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "libft.h"
 #include "util.h"
 #include "expand_utils.h"
-#include <assert.h> //TODO: REMOVE
 
 void	expand_character(t_expander *expander)
 {
@@ -53,7 +52,6 @@ void	expand_single_quote(t_expander *expander)
 
 	expander->src++;
 	end = ft_strchr(expander->src, '\'');
-	assert(end != NULL); // TODO: remove
 	string_push_str(&expander->result, expander->src, end);
 	expander->src = end + 1;
 }
@@ -64,7 +62,6 @@ void	expand_double_quote(t_expander *expander)
 
 	expander->src++;
 	end = ft_strchr(expander->src, '"');
-	assert(end != NULL); // TODO: remove
 	while (expander->src != end)
 	{
 		if (*expander->src == '$')

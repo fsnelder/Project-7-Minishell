@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/05 14:06:30 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 11:53:10 by fsnelder         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   lexer.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/12/05 14:06:30 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/09 14:42:43 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@ typedef struct s_token
 }	t_token;
 
 int		lexical_analysis(const char *line, t_list **tokens);
-void	print_token(void *t); // TODO: remove
 
 #endif

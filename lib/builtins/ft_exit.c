@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 09:44:56 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:54:16 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:43:09 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,10 @@ static bool	is_numeric(const char *str)
 
 int	ft_exit(const char **args, const char **envp)
 {
-	// TODO: take oldest exit code
 	(void)envp;
 	args++;
 	if (args[0] == NULL)
-		exit(0);
+		exit(g_ms_data.exit_code);
 	if (!is_numeric(args[0]))
 	{
 		printf("exit: %s: numeric argument required\n", args[0]);

@@ -15,6 +15,9 @@ $(BUILD_DIR):
 run: build
 	$(EXECUTABLE)
 
+system_tests: build
+	cd system_tests && bash dotest.sh
+
 test: build
 	$(TEST_EXECUTABLE)
 
@@ -28,4 +31,4 @@ clean:
 re: clean
 	$(MAKE) build
 
-.PHONY: build run clean re
+.PHONY: build run clean re system_tests

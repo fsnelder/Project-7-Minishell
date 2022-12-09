@@ -27,6 +27,8 @@ add_library(${NAME}
 	./environment/environment_utils.c
 	./environment/environment_utils2.c
 	./expander/expand_command.c
+	./executor/execute_builtins.c
+	./executor/execute_pipe.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

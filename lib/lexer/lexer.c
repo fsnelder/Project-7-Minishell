@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 14:03:09 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:26:17 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:42:50 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,6 @@
 #include "lexer_utils.h"
 #include <stdbool.h>
 #include <stdio.h>
-
-const char	*token_type_string(t_token_type type)
-{
-	switch (type) {
-		case PIPE:
-			return "PIPE";
-		case WORD:
-			return "WORD";
-		case TOKEN_REDIRECT_IN:
-			return "TOKEN_REDIRECT_IN";
-		case TOKEN_REDIRECT_OUT:
-			return "TOKEN_REDIRECT_OUT";
-		case TOKEN_REDIRECT_HEREDOC:
-			return "TOKEN_REDIRECT_HEREDOC";
-		case TOKEN_REDIRECT_APPEND:
-			return "TOKEN_REDIRECT_APPEND";
-	}
-	return "UNKNOWN";
-}
-
-// TODO: debug/remove
-void	print_token(void *t)
-{
-	t_token *token = (t_token*)t;
-	printf("Token(%s, %.*s)\n", token_type_string(token->type), (int)token->length, token->token);
-}
 
 typedef int	(*t_parse_function)(char, t_lexer*);
 

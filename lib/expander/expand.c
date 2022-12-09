@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 13:36:49 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 09:59:42 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:43:33 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "libft.h"
 #include "util.h"
 #include "expand_utils.h"
-#include <assert.h> //TODO: REMOVE
 
 void	expander_init(
 		t_expander *expander, const char *src, size_t len, const char **envp)

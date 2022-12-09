@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 14:27:37 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:58:15 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	reset_readline(void)
 
 static void	sigint_handler(int sig)
 {
-	// TODO: handle exit code
+	update_exitcode(SIGNAL_CODE + sig);
 	printf("\n");
 	reset_readline();
 }
@@ -42,12 +42,9 @@ static void	sigint_handler(int sig)
 static int	initialize_signal_handlers(void)
 {
 	signal(SIGINT, sigint_handler);
-	//signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
-
-// TODO: remove prototype
-void	print_command(void *cptr);
 
 static void	execute_line(const char *line)
 {

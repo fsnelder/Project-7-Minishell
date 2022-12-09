@@ -1,0 +1,90 @@
+
+-- TEST CASE echo -n 1 2 3 --
+-- Bash: --
+1 2 3
+-- Minishell: --
+
+-- Diff: --
+0a1
+> 1 2 3
+\ No newline at end of file
+
+-- TEST CASE exit 1 2 3 --
+-- Bash: --
+bash: line 1: exit: too many arguments
+
+-- Minishell: --
+exit
+exit: too many arguments
+
+-- Diff: --
+1,2c1
+< exit
+< exit: too many arguments
+---
+> bash: line 1: exit: too many arguments
+
+-- TEST CASE exit 5 a 2 --
+-- Bash: --
+bash: line 1: exit: too many arguments
+
+-- Minishell: --
+exit
+exit: too many arguments
+
+-- Diff: --
+1,2c1
+< exit
+< exit: too many arguments
+---
+> bash: line 1: exit: too many arguments
+
+-- TEST CASE filethatdoesntexist | grep bla | more --
+-- Bash: --
+bash: line 1: filethatdoesntexist: command not found
+
+-- Minishell: --
+
+-- Diff: --
+0a1
+> bash: line 1: filethatdoesntexist: command not found
+
+-- TEST CASE kaas --
+-- Bash: --
+bash: line 1: kaas: command not found
+
+-- Minishell: --
+minishell: kaas: command not found
+
+-- Diff: --
+1c1
+< minishell: kaas: command not found
+---
+> bash: line 1: kaas: command not found
+
+-- TEST CASE dsbksdgbksdghsd --
+-- Bash: --
+bash: line 1: dsbksdgbksdghsd: command not found
+
+-- Minishell: --
+minishell: dsbksdgbksdghsd: command not found
+
+-- Diff: --
+1c1
+< minishell: dsbksdgbksdghsd: command not found
+---
+> bash: line 1: dsbksdgbksdghsd: command not found
+
+-- TEST CASE 0 --
+-- Bash: --
+bash: line 1: 0: command not found
+
+-- Minishell: --
+minishell: 0: command not found
+
+-- Diff: --
+1c1
+< minishell: 0: command not found
+---
+> bash: line 1: 0: command not found
+

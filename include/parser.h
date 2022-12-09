@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 12:41:38 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 10:30:32 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 13:04:59 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_command
 {
 	t_list			*redirections;
 	t_list			*arguments;
+	char			**argv;
 }	t_command;
 
 int		parse(t_list *tokens, t_list **commands);

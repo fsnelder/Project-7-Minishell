@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/08 09:31:31 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 09:44:27 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:03:04 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ void	expand_exit_code(t_expander *expander)
 {
 	char	*code;
 
-	// TODO: handle real exit code
-	code = malloc_check(ft_itoa(0));
+	code = malloc_check(ft_itoa(g_ms_data.exit_code));
 	string_push_str(&expander->result, code, code + ft_strlen(code));
 	free(code);
 	expander->src++;

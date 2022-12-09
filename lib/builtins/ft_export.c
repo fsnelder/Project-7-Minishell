@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 09:45:09 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 12:01:40 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 13:02:23 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
 #include <stdlib.h>
 
 // TODO: sorted output
+
+static void sorted_output (const char **args, const char **envp)
+{
+	char	*temp;
+	int		i;
+	abort();
+}
+
 static int	export_no_arguments(const char **args, const char **envp)
 {
 	ft_env(args, envp);

@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 14:17:34 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 11:39:23 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 13:37:15 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ void	*ft_malloc(size_t n);
 void	*malloc_check(void *ptr);
 void	*ft_malloc(size_t n);
 void	init_minishell(void);
+void	update_exitcode(int code);
+void	free_split(char **strings);
+int		free_fds_and_return(int result, int nfds, ...);
 
 extern char				**environ;
 

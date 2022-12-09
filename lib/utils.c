@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 14:17:08 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 11:39:18 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 13:03:05 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ void	init_minishell(void)
 {
 	g_ms_data.exit_code = 0;
 	g_ms_data.env = environment_init((const char **)environ);
+}
+
+void	update_exitcode(int code)
+{
+	g_ms_data.exit_code = code;
 }
 
 static void	abort_program(const char *s)

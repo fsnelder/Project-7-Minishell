@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 12:33:29 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:22:17 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 13:07:35 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	parser_init_command(t_parser *parser)
 	parser->command = ft_malloc(1 * sizeof(t_command));
 	parser->command->arguments = NULL;
 	parser->command->redirections = NULL;
+	parser->command->argv = NULL;
 }
 
 void	command_add_redirect(

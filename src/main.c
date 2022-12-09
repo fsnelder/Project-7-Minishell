@@ -6,13 +6,14 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 11:39:30 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:05:25 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "util.h"
 #include "parser.h"
+#include "expand.h"
 #include "executor.h"
 #include <stdio.h>
 #include <readline/readline.h>
@@ -57,14 +58,13 @@ static void	execute_line(const char *line)
 	result = lexical_analysis(line, &tokens);
 	if (result != SUCCESS)
 		return ;
-	ft_lstiter(tokens, print_token);
 	result = parse(tokens, &commands);
 	if (result != SUCCESS)
 	{
 		ft_lstclear(&tokens, free);
 		return ;
 	}
-	ft_lstiter(commands, print_command);
+	expand_commands(commands);
 	result = execute(commands);
 	ft_lstclear(&commands, command_destroy);
 	ft_lstclear(&tokens, free);

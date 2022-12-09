@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 13:29:40 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 14:24:21 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 13:16:11 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ t_string	expand_word(
 				size_t len, const char **envp, const char *to_expand);
 char		*expand_token(
 				t_token *token, const char **envp, const char *to_expand);
+void		expand_commands(t_list *commands);
 
 #endif

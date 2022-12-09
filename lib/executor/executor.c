@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 15:17:55 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:40:54 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:04:02 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	executor_init(t_executor *executor, t_list *commands)
 	executor->commands = commands;
 	executor->pids = (int *)ft_malloc(executor->ncommands * sizeof(int));
 	ft_memset(executor->pids, -1, sizeof(int) * executor->ncommands);
+	executor->code = 0;
 }
 
 static void	executor_destroy(t_executor *executor)
@@ -37,35 +38,21 @@ static void	executor_destroy(t_executor *executor)
 static void	executor_wait(t_executor *executor)
 {
 	int	i;
+	int	status;
 
 	i = 0;
 	while (i < (int)executor->ncommands)
 	{
 		if (executor->pids[i] == -1)
 			break ;
-		// TODO: error handling and exit code
-		waitpid(executor->pids[i], NULL, 0);
+		if (waitpid(executor->pids[i], &status, 0) < 0)
+			perror("waitpid");
+		if (WIFEXITED(status))
+			executor->code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			executor->code = SIGNAL_CODE + WTERMSIG(status);
 		i++;
 	}
-}
-
-void	*token_to_expand(void *ptr)
-{
-	t_token	*token;
-
-	token = (t_token *)ptr;
-	return (expand_token(token, (const char **)environ, EXPAND_ALL));
-}
-
-void	expand_redirection(void *ptr)
-{
-	t_redirect	*redirect;
-
-	redirect = (t_redirect *)ptr;
-	if (redirect->redirect_type == REDIRECT_HEREDOC)
-		return ;
-	redirect->expanded = expand_token(
-			redirect->word, (const char **)environ, EXPAND_ALL);
 }
 
 static char	*construct_full_path(const char *directory, const char *name)
@@ -77,19 +64,6 @@ static char	*construct_full_path(const char *directory, const char *name)
 	full_path = malloc_check(ft_strjoin(temp, name));
 	free(temp);
 	return (full_path);
-}
-
-static void	free_split(char **strings)
-{
-	int	i;
-
-	i = 0;
-	while (strings[i] != NULL)
-	{
-		free(strings[i]);
-		i++;
-	}
-	free(strings);
 }
 
 static char	*search_path(const char *path, const char *name)
@@ -124,7 +98,6 @@ static int	find_command(char **out_path, char *name)
 	*out_path = name;
 	if (ft_strchr(name, '/'))
 		return (SUCCESS);
-	// TODO: search in PATH
 	path = getenv("PATH");
 	if (!path)
 		return (COMMAND_NOT_FOUND);
@@ -191,25 +164,6 @@ int	set_redirections(t_list *redirections)
 	return (SUCCESS);
 }
 
-char	**list_arguments_to_array(t_list *arguments)
-{
-	size_t	size;
-	char	**result;
-	int		i;
-
-	size = ft_lstsize(arguments);
-	result = ft_malloc((size + 1) * sizeof(char *));
-	result[size] = NULL;
-	i = 0;
-	while (arguments)
-	{
-		result[i] = (char *)arguments->content;
-		i++;
-		arguments = arguments->next;
-	}
-	return (result);
-}
-
 /*
 1. expand command name, all arguments and all redirect names
 2. check if the command is a builtin
@@ -224,29 +178,24 @@ static int	dispatch_builtin(t_command *command, char **args);
 
 static int	handle_child_process(t_command *command)
 {
-	t_list	*expanded_arguments;
 	int		result;
-	char	**args;
 	char	*full_path;
 
-	ft_lstiter(command->redirections, expand_redirection);
-	expanded_arguments = ft_lstmap(command->arguments, token_to_expand, free);
-	if (expanded_arguments == NULL)
-		return (SUCCESS);
 	if (set_redirections(command->redirections) != SUCCESS)
 		return (GENERAL_ERROR);
-	args = list_arguments_to_array(expanded_arguments);
-	if (is_builtin((const char *)expanded_arguments->content))
-		return (dispatch_builtin(command, args));
-	result = find_command(&full_path, (char *)expanded_arguments->content);
+	if (command->argv[0] == NULL)
+		return (SUCCESS);
+	if (is_builtin(command->argv[0]))
+		return (dispatch_builtin(command, command->argv));
+	result = find_command(&full_path, command->argv[0]);
 	if (result != SUCCESS)
 	{
-		printf("minishell: command not found\n");
+		printf("minishell: %s: command not found\n", command->argv[0]);
 		return (result);
 	}
-	execve(full_path, args, environ);
+	execve(full_path, command->argv, environ);
 	perror("minishell");
-	return (GENERAL_ERROR);
+	return (COMMAND_NOT_EXECUTABLE);
 }
 
 typedef int	(*t_builtin_function)(const char **, const char**);
@@ -277,7 +226,7 @@ static int	get_builtin_index(const char *name)
 
 static bool	is_builtin(const char *name)
 {
-	return (get_builtin_index(name) != -1);
+	return (name && get_builtin_index(name) != -1);
 }
 
 
@@ -331,113 +280,118 @@ static int	reset_std(int *std)
 	return (SUCCESS);
 }
 
-static int	handle_builtin(
-		t_executor *executor, t_command *command, t_list *expanded)
+static int	builtin_main_process(
+		t_executor *executor, t_command *command)
 {
-	char	**args;
 	int		code;
 	int		std[2];
 
-	args = list_arguments_to_array(expanded);
-	// todo: set exit code
 	if (dup_std(std) != SUCCESS)
 		return (GENERAL_ERROR);
 	if (set_redirections(command->redirections) != SUCCESS)
+	{
+		reset_std(std);
 		return (GENERAL_ERROR);
-	code = dispatch_builtin(command, args);
-	ft_lstclear(&expanded, free);
-	free(args);
+	}
+	executor->code = dispatch_builtin(command, command->argv);
 	reset_std(std);
 	return (SUCCESS);
 }
 
 // don't fork if builtin
 // expand before fork for builtin check, move expansion from handle_child_process
-static int	execute_one(t_executor *executor, int index, t_command *command)
+static int	execute_one(t_executor *executor, t_command *command)
 {
 	int		pid;
-	t_list	*expanded_arguments;
 
-	ft_lstiter(command->redirections, expand_redirection);
-	expanded_arguments = ft_lstmap(command->arguments, token_to_expand, free);
-	if (expanded_arguments == NULL)
-		return (SUCCESS);
-	if (is_builtin((const char *)expanded_arguments->content))
-		return (handle_builtin(executor, command, expanded_arguments));
+	if (is_builtin(command->argv[0]))
+		return (builtin_main_process(executor, command));
 	pid = fork();
 	if (pid == 0)
 		exit(handle_child_process(command));
 	else if (pid < 0)
 		return (GENERAL_ERROR);
-	executor->pids[index] = pid;
+	executor->pids[0] = pid;
 	return (SUCCESS);
 }
 
-static int execute_piped_child(int std_in, int std_out, t_command *command)
+static int	set_pipe_redirections(int input, int output)
 {
-	if (std_in != -1)
-		dup2(std_in, STDIN_FILENO);
-	if (std_out != -1)
-		dup2(std_out, STDOUT_FILENO);
-	close(std_in);
-	close(std_out);
-	exit(handle_child_process(command));
+	int	result;
+
+	result = SUCCESS;
+	if (input != -1)
+	{
+		if (dup2(input, STDIN_FILENO) < 0)
+			result = (GENERAL_ERROR);
+	}
+	if (output != -1)
+	{
+		if (dup2(output, STDOUT_FILENO) < 0)
+			result = GENERAL_ERROR;
+	}
+	return (free_fds_and_return(result, 2, input, output));
 }
 
 typedef struct s_command_info
 {
-	int			std_in;
-	int			std_out;
+	int			piped[2];
+	int			input_fd;
+	int			pid_index;
 	t_command	*command;
 }	t_command_info;
 
-static t_command_info	make_command_info(
-	int std_in, int std_out, t_command *command)
+static int execute_piped_child(t_command_info *cinfo)
 {
-	return ((t_command_info){std_in, std_out, command});
+	if (set_pipe_redirections(cinfo->input_fd, cinfo->piped[1]) != SUCCESS)
+		return (GENERAL_ERROR);
+	close(cinfo->piped[0]);
+	return (handle_child_process(cinfo->command));
+}
+
+static void	init_command_info(t_command_info *cinfo)
+{
+	cinfo->input_fd = -1;
+	cinfo->pid_index = 0;
+	cinfo->command = NULL;
+	ft_memset(cinfo->piped, -1, 2 * sizeof(int));
 }
 
 // 1. fork
 // 2. redirect STDIN (if not first process)
 // 3. redirect STDOUT (if not last process)
 static int	execute_piped_command(
-	t_executor *executor, int index, t_command_info info)
+	t_executor *executor, t_command_info *info)
 {
 	int	pid;
 
 	pid = fork();
 	if (pid == 0)
-		exit(execute_piped_child(info.std_in, info.std_out, info.command));
+		exit(execute_piped_child(info));
 	else if (pid < 0)
 		return (GENERAL_ERROR);
-	executor->pids[index] = pid;
-	close(info.std_in);
-	close(info.std_out);
-	return (SUCCESS);
+	executor->pids[info->pid_index] = pid;
+	return (free_fds_and_return(SUCCESS, 2, info->input_fd, info->piped[1]));
 }
 
 static int	execute_pipe_sequence(t_executor *executor, t_list *commands)
 {
-	int					fds[2];
-	int					previous_fd;
-	int					index;
+	t_command_info		cinfo;
 
-	index = 0;
-	previous_fd = -1;
+	init_command_info(&cinfo);
 	while (commands)
 	{
+		ft_memset(cinfo.piped, -1, 2 * sizeof(int));
+		cinfo.command = (t_command *)commands->content;
 		if (commands->next == NULL)
-			return (execute_piped_command(
-					executor, index, make_command_info(
-						previous_fd, -1, (t_command *)commands->content)));
-		if (pipe(fds) < 0)
+			return (execute_piped_command(executor, &cinfo));
+		if (pipe(cinfo.piped) < 0)
 			return (GENERAL_ERROR);
-		if (execute_piped_command(
-				executor, index, make_command_info(previous_fd, fds[1],
-					(t_command *)commands->content)) != SUCCESS)
-			return (GENERAL_ERROR);
-		previous_fd = fds[0];
-		index++;
+		if (execute_piped_command(executor, &cinfo) != SUCCESS)
+			return (free_fds_and_return(GENERAL_ERROR, 3,
+					cinfo.input_fd, cinfo.piped[0], cinfo.piped[1]));
+		cinfo.input_fd = cinfo.piped[0];
+		cinfo.pid_index++;
 		commands = commands->next;
 	}
 	return (SUCCESS);
@@ -452,11 +406,14 @@ int	execute(t_list *commands)
 		return (GENERAL_ERROR);
 	executor_init(&executor, commands);
 	if (executor.ncommands == 1)
-		result = execute_one(&executor, 0, (t_command *)commands->content);
+		result = execute_one(&executor, (t_command *)commands->content);
 	else
 		result = execute_pipe_sequence(&executor, commands);
 	// TODO: reconsider: kill other child processes if a system call error occurs?
 	executor_wait(&executor);
+	if (result != SUCCESS)
+		executor.code = result;
+	update_exitcode(executor.code);
 	executor_destroy(&executor);
 	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 09:44:59 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 12:06:15 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 12:10:18 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	update_environment(const char *newpwd)
 {
 	t_environment	*env;
 	const char		*oldpwd;
-	
+
 	if (!newpwd)
 		return ;
 	env = &g_ms_data.env;

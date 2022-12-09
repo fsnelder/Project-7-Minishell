@@ -2,6 +2,7 @@ set(NAME minishell_utils)
 
 add_library(${NAME}
 	utils.c
+	utils2.c
 	./lexer/lexer.c
 	./lexer/lexer_utils.c
 	./lexer/lexer_parse_functions.c
@@ -25,6 +26,7 @@ add_library(${NAME}
 	./environment/environment.c
 	./environment/environment_utils.c
 	./environment/environment_utils2.c
+	./expander/expand_command.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

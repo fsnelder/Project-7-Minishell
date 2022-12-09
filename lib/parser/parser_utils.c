@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 10:16:06 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:17:14 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 13:07:20 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	command_destroy(void *command_ptr)
 	command = (t_command *)command_ptr;
 	ft_lstclear(&command->arguments, NULL);
 	ft_lstclear(&command->redirections, redirect_destroy);
+	free_split(command->argv);
 	free(command_ptr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 13:36:49 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 14:23:12 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 09:59:42 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@
 #include "expand_utils.h"
 #include <assert.h> //TODO: REMOVE
 
-
-static void	expander_init(
+void	expander_init(
 		t_expander *expander, const char *src, size_t len, const char **envp)
 {
 	expander->src = src;
@@ -71,7 +70,7 @@ void	expand_environment_variable(t_expander *expander)
 
 typedef void	(*t_expander_function)(t_expander *);
 
-static void	expand_dispatch(t_expander *expander, const char *to_expand)
+void	expand_dispatch(t_expander *expander, const char *to_expand)
 {
 	static const t_expander_function	expanders[255] = {
 	['$'] = expand_variable,
@@ -85,22 +84,4 @@ static void	expand_dispatch(t_expander *expander, const char *to_expand)
 		expand_character(expander);
 	else
 		(expanders[ch])(expander);
-}
-
-t_string	expand_word(
-	const char *src, size_t len, const char **envp, const char *to_expand)
-{
-	t_expander	expander;
-
-	expander_init(&expander, src, len, envp);
-	while (expander.src != expander.end)
-	{
-		expand_dispatch(&expander, to_expand);
-	}
-	return (expander.result);
-}
-
-char	*expand_token(t_token *token, const char **envp, const char *to_expand)
-{
-	return (expand_word(token->token, token->length, envp, to_expand).str);
 }

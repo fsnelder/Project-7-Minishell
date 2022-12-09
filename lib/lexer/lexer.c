@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   lexer.c                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 14:03:09 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 14:03:10 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 10:26:17 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	dispatch_character(char ch, t_lexer *lexer)
 	['\''] = parse_quoted,
 	['>'] = parse_redirect_out,
 	['<'] = parse_redirect_in,
-	['|'] = parse_pipe,
+	['|'] = lex_pipe,
 	};
 	int								index;
 

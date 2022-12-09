@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   lexer_parse_functions.c                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 10:01:10 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 13:46:36 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 10:26:00 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	parse_redirect_out(char ch, t_lexer *lexer)
 	return (SUCCESS);
 }
 
-int	parse_pipe(char ch, t_lexer *lexer)
+int	lex_pipe(char ch, t_lexer *lexer)
 {
 	lexer_flush_token(lexer);
 	lexer_new_token(lexer, PIPE, lexer->line, 1);

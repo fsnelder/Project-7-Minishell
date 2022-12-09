@@ -6,12 +6,25 @@ add_library(${NAME}
 	./lexer/lexer_utils.c
 	./lexer/lexer_parse_functions.c
 	./parser/parser.c
+	./parser/parse_files.c
+	./parser/parser_utils.c
+	./parser/parse_word_pipe.c
 	"./string/ft_string.c"
 	./expander/expand.c
 	./expander/expander_expand_functions.c
+	./expander/expand_word_token.c
 	./executor/executor.c
 	./executor/heredoc.c
+	./builtins/ft_cd.c
+	./builtins/ft_echo.c
+	./builtins/ft_env.c
+	./builtins/ft_exit.c
+	./builtins/ft_export.c
 	./builtins/ft_pwd.c
+	./builtins/ft_unset.c
+	./environment/environment.c
+	./environment/environment_utils.c
+	./environment/environment_utils2.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

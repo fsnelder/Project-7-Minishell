@@ -6,19 +6,14 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/08 09:38:08 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 09:45:34 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 11:44:59 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPAND_UTILS_H
 # define EXPAND_UTILS_H
 
-# define ALPHABETIC "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-# define UNDESCORE "_"
-# define NUMBER "1234567890"
-# define WORD_START "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-# define WORD_ENTRY "1234567890_abcdefghijklm\
-nopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# include "grammar.h"
 
 typedef struct s_expander
 {
@@ -35,5 +30,9 @@ void	expand_single_quote(t_expander *expander);
 void	expand_double_quote(t_expander *expander);
 
 void	expand_environment_variable(t_expander *expander);
+
+void	expander_init(t_expander *expander,
+			const char *src, size_t len, const char **envp);
+void	expand_dispatch(t_expander *expander, const char *to_expand);
 
 #endif

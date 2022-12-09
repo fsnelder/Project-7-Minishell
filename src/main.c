@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 15:33:26 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 11:39:30 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	main(int argc, char *argv[], char *environ[])
 
 	(void)argc;
 	(void)argv;
+	init_minishell();
 	initialize_signal_handlers();
 	while (true)
 	{

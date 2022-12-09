@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_pwd.c                                           :+:    :+:            */
+/*   environment_utils2.c                               :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/08 15:01:56 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:28:22 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/09 11:45:34 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/09 11:47:58 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "util.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "grammar.h"
+#include "libft.h"
+#include <stdbool.h>
 
-int	ft_pwd(const char **args, const char **envp)
+bool	is_valid_identifier(const char *name)
 {
-	char	*cwd;
-
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
+	if (ft_strchr(WORD_START, *name) == NULL)
+		return (false);
+	while (*name)
 	{
-		perror("pwd");
-		return (1);
+		if (ft_strchr(WORD_ENTRY, *name) == NULL)
+			return (false);
+		name++;
 	}
-	printf("%s\n", cwd);
-	free(cwd);
-	return (0);
+	return (true);
 }

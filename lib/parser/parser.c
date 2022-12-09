@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 12:33:29 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 10:46:58 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 10:22:17 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,31 +67,7 @@ static void	parser_init(t_parser *parser, t_list *tokens, t_list **commands)
 	parser->token = tokens;
 }
 
-static void	redirect_destroy(void *redirect)
-{
-	free(((t_redirect *)redirect)->expanded);
-	free(redirect);
-}
-
-void	command_destroy(void *command_ptr)
-{
-	t_command	*command;
-
-	if (!command_ptr)
-		return ;
-	command = (t_command *)command_ptr;
-	ft_lstclear(&command->arguments, NULL);
-	ft_lstclear(&command->redirections, redirect_destroy);
-	free(command_ptr);
-}
-
-static void	parser_destroy(t_parser *parser)
-{
-	command_destroy(parser->command);
-	ft_lstclear(parser->commands, command_destroy);
-}
-
-static void	parser_init_command(t_parser *parser)
+void	parser_init_command(t_parser *parser)
 {
 	if (parser->command != NULL)
 		return ;
@@ -100,15 +76,7 @@ static void	parser_init_command(t_parser *parser)
 	parser->command->redirections = NULL;
 }
 
-static void	parser_flush_command(t_parser *parser)
-{
-	if (parser->command == NULL)
-		return ;
-	ft_lstadd_back(parser->commands, malloc_check(ft_lstnew(parser->command)));
-	parser->command = NULL;
-}
-
-static void	command_add_redirect(
+void	command_add_redirect(
 		t_command *command, t_redirect_type type, t_token *word)
 {
 	t_redirect	*redirect;
@@ -118,67 +86,6 @@ static void	command_add_redirect(
 	redirect->word = word;
 	redirect->expanded = NULL;
 	ft_lstadd_back(&command->redirections, malloc_check(ft_lstnew(redirect)));
-}
-
-static int	parse_redirection(t_parser *parser, t_redirect_type type, t_token *token)
-{
-	t_token	*next;
-
-	parser_init_command(parser);
-	if (parser->token->next == NULL)
-	{
-		printf("parse error near `\\n'\n");
-		return (GENERAL_ERROR);
-	}
-	next = (t_token *)parser->token->next->content;
-	if (next->type != WORD)
-	{
-		printf("parse error near `%.*s'\n", (int)next->length, next->token);
-		return (GENERAL_ERROR);
-	}
-	command_add_redirect(parser->command, type, next);
-	parser->token = parser->token->next->next;
-	return (SUCCESS);
-}
-
-static int	parse_append(t_parser *parser, t_token *token)
-{
-	return (parse_redirection(parser, REDIRECT_APPEND, token));
-}
-
-static int	parse_heredoc(t_parser *parser, t_token *token)
-{
-	return (parse_redirection(parser, REDIRECT_HEREDOC, token));
-}
-
-static int	parse_in(t_parser *parser, t_token *token)
-{
-	return (parse_redirection(parser, REDIRECT_IN, token));
-}
-
-static int	parse_out(t_parser *parser, t_token *token)
-{
-	return (parse_redirection(parser, REDIRECT_OUT, token));
-}
-
-static int	parse_pipe(t_parser *parser, t_token *token)
-{
-	if (!parser->command || parser->token->next == NULL)
-	{
-		printf("parse error near `%.*s'\n", (int)token->length, token->token);
-		return (GENERAL_ERROR);
-	}
-	parser_flush_command(parser);
-	parser->token = parser->token->next;
-	return (SUCCESS);
-}
-
-static int	parse_word(t_parser *parser, t_token *token)
-{
-	parser_init_command(parser);
-	ft_lstadd_back(&parser->command->arguments, malloc_check(ft_lstnew(token)));
-	parser->token = parser->token->next;
-	return (SUCCESS);
 }
 
 typedef int	(*t_token_parser)(t_parser *, t_token *);

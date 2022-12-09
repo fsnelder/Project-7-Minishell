@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_pwd.c                                           :+:    :+:            */
+/*   grammar.h                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/08 15:01:56 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:28:22 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/09 11:44:51 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/09 11:45:03 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "util.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef GRAMMAR_H
+# define GRAMMAR_H
 
-int	ft_pwd(const char **args, const char **envp)
-{
-	char	*cwd;
+# define ALPHABETIC "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# define UNDESCORE "_"
+# define NUMBER "1234567890"
+# define WORD_START "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# define WORD_ENTRY "1234567890_abcdefghijklm\
+nopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-	{
-		perror("pwd");
-		return (1);
-	}
-	printf("%s\n", cwd);
-	free(cwd);
-	return (0);
-}
+#endif

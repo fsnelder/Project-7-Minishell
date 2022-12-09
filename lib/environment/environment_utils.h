@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_pwd.c                                           :+:    :+:            */
+/*   environment_utils.h                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/08 15:01:56 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:28:22 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/09 11:11:31 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/09 11:33:21 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "util.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef ENVIRONMENT_UTILS_H
+# define ENVIRONMENT_UTILS_H
 
-int	ft_pwd(const char **args, const char **envp)
-{
-	char	*cwd;
+void	environment_resize(t_environment *env);
+int		environment_get_index(t_environment *env, const char *name);
+void	environment_push_back(t_environment *env,
+			const char *name, const char *value);
+void	environment_replace(t_environment *env,
+			const char *name, const char *value, int index);
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-	{
-		perror("pwd");
-		return (1);
-	}
-	printf("%s\n", cwd);
-	free(cwd);
-	return (0);
-}
+extern char	**environ;
+
+#endif

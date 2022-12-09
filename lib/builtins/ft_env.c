@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_pwd.c                                           :+:    :+:            */
+/*   ft_env.c                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/12/08 15:01:56 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 10:28:22 by fsnelder      ########   odam.nl         */
+/*   Created: 2022/12/09 09:45:05 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/09 11:40:54 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int	ft_pwd(const char **args, const char **envp)
+int	ft_env(const char **args, const char **envp)
 {
-	char	*cwd;
+	t_environment	*env;
+	size_t			i;
 
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
+	env = &g_ms_data.env;
+	i = 0;
+	while (i < env->len)
 	{
-		perror("pwd");
-		return (1);
+		printf("%s\n", env->envp[i]);
+		i++;
 	}
-	printf("%s\n", cwd);
-	free(cwd);
 	return (0);
 }

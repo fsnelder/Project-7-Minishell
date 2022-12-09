@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   lexer_utils.h                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: fsnelder <fsnelder@student.codam.nl>         +#+                     */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 10:02:18 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/06 11:33:06 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 10:26:06 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		parse_quoted(char ch, t_lexer *lexer);
 int		parse_generic(char ch, t_lexer *lexer);
 int		parse_redirect_in(char ch, t_lexer *lexer);
 int		parse_redirect_out(char ch, t_lexer *lexer);
-int		parse_pipe(char ch, t_lexer *lexer);
+int		lex_pipe(char ch, t_lexer *lexer);
 
 void	lexer_init(t_lexer *lexer, t_list **tokens, const char *line);
 void	lexer_destroy(t_lexer *lexer);

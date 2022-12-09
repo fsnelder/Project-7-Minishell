@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_string.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fsnelder <fsnelder@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/07 13:19:32 by fsnelder          #+#    #+#             */
-/*   Updated: 2022/12/07 14:56:36 by fsnelder         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ft_string.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/12/07 13:19:32 by fsnelder      #+#    #+#                 */
+/*   Updated: 2022/12/09 11:04:47 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 t_string	string_new(size_t initial_capacity)
 {
-	t_string str;
+	t_string	str;
 
 	str.cap = initial_capacity + 1;
 	str.str = ft_malloc(str.cap * sizeof(char));

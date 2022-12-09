@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 15:17:55 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 16:45:48 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 10:40:54 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static char	*construct_full_path(const char *directory, const char *name)
 	char	*temp;
 	char	*full_path;
 
-	temp = ft_strjoin(directory, "/");
-	full_path = ft_strjoin(temp, name);
+	temp = malloc_check(ft_strjoin(directory, "/"));
+	full_path = malloc_check(ft_strjoin(temp, name));
 	free(temp);
 	return (full_path);
 }
@@ -255,6 +255,12 @@ static int	get_builtin_index(const char *name)
 {
 	static const char	*builtins[] = {
 		"pwd",
+		"cd",
+		"echo",
+		"env",
+		"exit",
+		"export",
+		"unset",
 		NULL
 	};
 	int					i;
@@ -279,7 +285,13 @@ static bool	is_builtin(const char *name)
 static int	dispatch_builtin(t_command *command, char **args)
 {
 	static const t_builtin_function	builtins[] = {
-		ft_pwd
+		ft_pwd,
+		ft_cd,
+		ft_echo,
+		ft_env,
+		ft_exit,
+		ft_export,
+		ft_unset
 	};
 
 	return (

@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/08 13:55:14 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/08 14:52:15 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:40:38 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,22 @@ static int	heredoc_read(
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			free(delimiter);
 			return (GENERAL_ERROR);
+		}
 		if (ft_strncmp(line, delimiter, UINT64_MAX) == 0)
+		{
+			free(line);
 			break ;
+		}
 		if (should_expand)
 			line = heredoc_expand(line);
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
 	}
+	free(delimiter);
 	return (SUCCESS);
 }
 

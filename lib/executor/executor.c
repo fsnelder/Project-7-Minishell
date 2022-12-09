@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 15:17:55 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 14:04:02 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:31:01 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/wait.h>
+#include <limits.h>
 
 static void	executor_init(t_executor *executor, t_list *commands)
 {
@@ -195,6 +197,7 @@ static int	handle_child_process(t_command *command)
 	}
 	execve(full_path, command->argv, environ);
 	perror("minishell");
+	free(full_path);
 	return (COMMAND_NOT_EXECUTABLE);
 }
 
@@ -275,9 +278,7 @@ static int	reset_std(int *std)
 		perror("dup2");
 		exit(1);
 	}
-	close(std[0]);
-	close(std[1]);
-	return (SUCCESS);
+	return (free_fds_and_return(SUCCESS, 2, std[0], std[1]));
 }
 
 static int	builtin_main_process(
@@ -345,7 +346,8 @@ static int execute_piped_child(t_command_info *cinfo)
 {
 	if (set_pipe_redirections(cinfo->input_fd, cinfo->piped[1]) != SUCCESS)
 		return (GENERAL_ERROR);
-	close(cinfo->piped[0]);
+	if (cinfo->piped[0] != -1)
+		close(cinfo->piped[0]);
 	return (handle_child_process(cinfo->command));
 }
 

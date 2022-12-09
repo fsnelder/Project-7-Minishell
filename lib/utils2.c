@@ -6,14 +6,20 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 13:06:52 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 13:43:56 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:12:44 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "util.h"
+#include "environment.h"
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
+
+void	destroy_minishell(void)
+{
+	environment_destroy(&g_ms_data.env);
+}
 
 void	free_split(char **strings)
 {

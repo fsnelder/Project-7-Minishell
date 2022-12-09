@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 14:05:25 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:27:37 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,7 @@ int	main(int argc, char *argv[], char *environ[])
 		execute_line(line);
 		free(line);
 	}
-	return (0);
+	destroy_minishell();
+	printf("exit\n");
+	return (g_ms_data.exit_code);
 }

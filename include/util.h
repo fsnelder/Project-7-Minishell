@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 14:17:34 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 13:37:15 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/09 14:12:50 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 
 # include <stddef.h>
 # include "environment.h"
+
+# ifdef __linux__
+#  include <limits.h>
+#  define UINT64_MAX UINT_MAX
+# endif
 
 typedef struct s_minishell_data {
 	int				exit_code;
@@ -36,6 +41,7 @@ void	*ft_malloc(size_t n);
 void	*malloc_check(void *ptr);
 void	*ft_malloc(size_t n);
 void	init_minishell(void);
+void	destroy_minishell(void);
 void	update_exitcode(int code);
 void	free_split(char **strings);
 int		free_fds_and_return(int result, int nfds, ...);

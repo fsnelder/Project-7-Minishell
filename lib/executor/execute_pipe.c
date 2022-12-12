@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 15:45:04 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 15:57:02 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 11:57:47 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-// 1. fork
-// 2. redirect STDIN (if not first process)
-// 3. redirect STDOUT (if not last process)
 int	execute_piped_command(
 	t_executor *executor, t_command_info *info)
 {
@@ -81,4 +78,31 @@ int	handle_child_process(t_command *command)
 	perror("minishell");
 	free(full_path);
 	return (COMMAND_NOT_EXECUTABLE);
+}
+
+int	set_pipe_redirections(int input, int output)
+{
+	int	result;
+
+	result = SUCCESS;
+	if (input != -1)
+	{
+		if (dup2(input, STDIN_FILENO) < 0)
+			result = (GENERAL_ERROR);
+	}
+	if (output != -1)
+	{
+		if (dup2(output, STDOUT_FILENO) < 0)
+			result = GENERAL_ERROR;
+	}
+	return (free_fds_and_return(result, 2, input, output));
+}
+
+int	execute_piped_child(t_command_info *cinfo)
+{
+	if (set_pipe_redirections(cinfo->input_fd, cinfo->piped[1]) != SUCCESS)
+		return (GENERAL_ERROR);
+	if (cinfo->piped[0] != -1)
+		close(cinfo->piped[0]);
+	return (handle_child_process(cinfo->command));
 }

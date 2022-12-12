@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/05 12:06:30 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 14:58:15 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 13:46:25 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	reset_readline(void)
 
 static void	sigint_handler(int sig)
 {
-	update_exitcode(SIGNAL_CODE + sig);
+	update_exitcode(1);
 	printf("\n");
 	reset_readline();
 }

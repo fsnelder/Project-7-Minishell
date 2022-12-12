@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 15:28:52 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 15:41:01 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 11:36:29 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include <stdbool.h>
 #include "util.h"
 #include <stdio.h>
-
 
 typedef int	(*t_builtin_function)(const char **, const char**);
 
@@ -51,8 +50,6 @@ bool	is_builtin(const char *name)
 	return (name && get_builtin_index(name) != -1);
 }
 
-
-// precondition: command is a builtin confirmed by `is_builtin(args[0])`
 int	dispatch_builtin(t_command *command, char **args)
 {
 	static const t_builtin_function	builtins[] = {
@@ -68,4 +65,22 @@ int	dispatch_builtin(t_command *command, char **args)
 	return (
 		(builtins[get_builtin_index(
 					args[0])])((const char **)args, (const char **)environ));
+}
+
+int	builtin_main_process(
+		t_executor *executor, t_command *command)
+{
+	int		code;
+	int		std[2];
+
+	if (dup_std(std) != SUCCESS)
+		return (GENERAL_ERROR);
+	if (set_redirections(command->redirections) != SUCCESS)
+	{
+		reset_std(std);
+		return (GENERAL_ERROR);
+	}
+	executor->code = dispatch_builtin(command, command->argv);
+	reset_std(std);
+	return (SUCCESS);
 }

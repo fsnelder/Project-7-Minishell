@@ -29,6 +29,10 @@ add_library(${NAME}
 	./expander/expand_command.c
 	./executor/execute_builtins.c
 	./executor/execute_pipe.c
+	./executor/execute_redirections.c
+	./executor/execute_command.c
+	./executor/execute_std.c
+	./executor/heredoc_expand.c
 )
 
 target_compile_options(${NAME} PRIVATE -Werror -Wall -Wextra)

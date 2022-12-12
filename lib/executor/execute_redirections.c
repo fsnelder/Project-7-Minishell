@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/12 11:28:22 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/12 14:15:01 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 16:04:19 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ int	set_redirect(t_redirect *redirect, int file_mode, int dup_to)
 			S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (fd < 0)
 	{
-		// TODO: use filename for error message
-		perror("minishell: open");
+		perror(redirect->expanded);
 		return (GENERAL_ERROR);
 	}
 	if (dup2(fd, dup_to) < 0)

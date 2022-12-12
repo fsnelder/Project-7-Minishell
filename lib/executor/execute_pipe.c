@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 15:45:04 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/12 11:57:47 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 15:39:37 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	execute_pipe_sequence(t_executor *executor, t_list *commands)
 		if (commands->next == NULL)
 			return (execute_piped_command(executor, &cinfo));
 		if (pipe(cinfo.piped) < 0)
-			return (GENERAL_ERROR);
+			return (free_fds_and_return(GENERAL_ERROR, 1, cinfo.input_fd));
 		if (execute_piped_command(executor, &cinfo) != SUCCESS)
 			return (free_fds_and_return(GENERAL_ERROR, 3,
 					cinfo.input_fd, cinfo.piped[0], cinfo.piped[1]));

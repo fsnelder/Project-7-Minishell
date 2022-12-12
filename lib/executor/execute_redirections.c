@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/12 11:28:22 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/12 11:58:01 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 14:15:01 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	set_redirection(t_redirect *redirect)
 		return (set_redirect(redirect,
 				O_WRONLY | O_TRUNC | O_CREAT, STDOUT_FILENO));
 	else if (redirect->redirect_type == REDIRECT_APPEND)
-		return (set_redirect(redirect, O_APPEND | O_CREAT, STDOUT_FILENO));
+		return (set_redirect(redirect,
+				O_APPEND | O_CREAT | O_WRONLY, STDOUT_FILENO));
 	return (GENERAL_ERROR);
 }
 

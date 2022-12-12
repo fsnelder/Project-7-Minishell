@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/09 09:45:09 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 13:02:23 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 15:31:01 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,56 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 // TODO: sorted output
 
-static void sorted_output (const char **args, const char **envp)
+static void	sorted_output(t_environment *env)
 {
 	char	*temp;
-	int		i;
-	abort();
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (i < env->len)
+	{
+		j = 0;
+		while (j < env->len)
+		{
+			if (ft_strncmp(env->envp[i], env->envp[j], INT_MAX) < 0)
+			{
+				temp = env->envp[i];
+				env->envp[i] = env->envp[j];
+				env->envp[j] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+static void	shallow_copy_env(t_environment *env)
+{
+	env->len = g_ms_data.env.len;
+	env->cap = g_ms_data.env.cap;
+	env->envp = (char **)ft_malloc((env->len + 1) * sizeof(char *));
+	ft_memcpy(env->envp, g_ms_data.env.envp, (env->len + 1) * sizeof(char *));
 }
 
 static int	export_no_arguments(const char **args, const char **envp)
 {
-	ft_env(args, envp);
+	t_environment	env;
+	size_t			i;
+
+	shallow_copy_env(&env);
+	sorted_output(&env);
+	i = 0;
+	while (i < env.len)
+	{
+		printf("%s\n", env.envp[i]);
+		i++;
+	}
+	free(env.envp);
 	return (SUCCESS);
 }
 
@@ -51,7 +88,6 @@ static int	export_argument(t_environment *env, const char *arg)
 	return (SUCCESS);
 }
 
-// a=b -> "a\0" -> "a\0b\0"
 int	ft_export(const char **args, const char **envp)
 {
 	t_environment	*env;

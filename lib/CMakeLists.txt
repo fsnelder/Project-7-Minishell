@@ -11,6 +11,7 @@ add_library(${NAME}
 	./parser/parser_utils.c
 	./parser/parse_word_pipe.c
 	"./string/ft_string.c"
+	"./string/ft_string_2.c"
 	./expander/expand.c
 	./expander/expander_expand_functions.c
 	./expander/expand_word_token.c

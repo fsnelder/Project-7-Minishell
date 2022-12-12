@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/07 15:17:55 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/12 11:55:43 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 15:42:40 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ int	execute(t_list *commands)
 		result = execute_one(&executor, (t_command *)commands->content);
 	else
 		result = execute_pipe_sequence(&executor, commands);
-	// TODO: reconsider: kill other child processes if a system call error occurs?
 	executor_wait(&executor);
 	if (result != SUCCESS)
 		executor.code = result;

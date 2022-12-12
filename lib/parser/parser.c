@@ -6,7 +6,7 @@
 /*   By: fsnelder <fsnelder@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/06 12:33:29 by fsnelder      #+#    #+#                 */
-/*   Updated: 2022/12/09 13:07:35 by fsnelder      ########   odam.nl         */
+/*   Updated: 2022/12/12 13:57:33 by fsnelder      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,47 +17,6 @@
 #include "libft.h"
 #include "util.h"
 #include <stdio.h>
-
-char* get_redirect_string(t_redirect_type type) {
-	switch (type) {
-		case REDIRECT_IN:
-			return "<";
-		case REDIRECT_APPEND:
-			return ">>";
-		case REDIRECT_OUT:
-			return ">";
-		case REDIRECT_HEREDOC:
-			return "<<";
-	}
-	abort();
-}
-
-// Command: <name> , redirections: [ <redirections> ] arguments: [ <arguments> ]
-void	print_command(void *cptr)
-{
-	t_command *command = (t_command*)cptr;
-	printf("Command: redirections: [");
-	for (t_list *x = command->redirections; x != NULL; x = x->next) {
-		t_redirect *r = (t_redirect *)x->content;
-		if (x != command->redirections) {
-			printf(",");
-		}
-		printf(" %s %.*s", get_redirect_string(r->redirect_type), (int)r->word->length, r->word->token);
-	}
-	printf(" ]");
-	printf(" arguments: [");
-	t_list *x = command->arguments;
-	while (x != NULL) {
-		t_token *arg = (t_token *)x->content;
-		if (x != command->arguments) {
-			printf(",");
-		}
-		printf(" %.*s", (int)arg->length, arg->token);
-		x = x->next;
-	}
-	printf(" ]");
-	printf("\n");
-}
 
 static void	parser_init(t_parser *parser, t_list *tokens, t_list **commands)
 {

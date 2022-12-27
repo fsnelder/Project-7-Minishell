@@ -1,7 +1,7 @@
 # Project-7-Minishell
 
 The seventh project is creating a (mini) version of the shell.
-The program must handle the following thins:
+The program must handle the following things:
 
 -  ’ (single quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence.
 
@@ -51,3 +51,6 @@ The program must handle the following thins:
 
 
 Thanks to my Minishell-partner https://github.com/mraasvel , I also learned the basics on CMake, Dockerfiles, Systemtesting and proper (header)file-management in larger projects.
+
+
+The program can be run by `make run'
